@@ -21,21 +21,22 @@ if ($fileOpen) {
 
         // Decode json object
         $data = json_decode($decompressedSpecs);
-        
-        // Get mac address
-        $macAddress = $data->mac;
+
 
         // Store per serial each unique mac address
-        if (!isset($serialMacMap[$serial])) {
-            $serialMacMap[$serial] = [];
-        }
-        if (!in_array($macAddress, $serialMacMap[$serial])) {
-            $serialMacMap[$serial][] = $macAddress;
+        if (isset($data->mac))
+            $macAddress = $data->mac; {
+            if (!isset($serialMacMap[$serial])) {
+                $serialMacMap[$serial] = [];
+            }
+            if (!in_array($macAddress, $serialMacMap[$serial])) {
+                $serialMacMap[$serial][] = $macAddress;
+            }
         }
     }
     fclose($fileOpen);
     $serialCounts = [];
-    
+
     // Count per serial the number of mac addresses
     foreach ($serialMacMap as $serial => $macAddresses) {
         $serialCounts[$serial] = count($macAddresses);
@@ -46,4 +47,3 @@ if ($fileOpen) {
         echo "Serialnumber: $serial, number of devices installed on $serialCounts[$serial] <br>";
     }
 }
-?>
