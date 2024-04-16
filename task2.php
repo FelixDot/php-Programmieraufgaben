@@ -6,31 +6,31 @@ $serialMacMap = [];
 if ($fileOpen) {
     while (!feof($fileOpen)) {
         $line = fgets($fileOpen);
-
         $serialPos = strpos($line, 'serial=');
         $specsPos = strpos($line, 'specs=');
+        if ($serialPos && $specsPos) {
 
-        $serialPart = substr($line, $serialPos + 7);
-        $serial = trim(substr($serialPart, 0, strpos($serialPart, ' ')));
-        $specsPart = substr($line, $specsPos + 6);
-        $specs = trim(substr($specsPart, 0, strpos($specsPart, ' ')));
+            $serialPart = substr($line, $serialPos + 7);
+            $serial = trim(substr($serialPart, 0, strpos($serialPart, ' ')));
+            $specsPart = substr($line, $specsPos + 6);
+            $specs = trim(substr($specsPart, 0, strpos($specsPart, ' ')));
 
-        // Decode and decompress specs
-        $decodedSpecs = base64_decode($specs);
-        $decompressedSpecs = gzdecode($decodedSpecs);
+            // Decode and decompress specs
+            $decodedSpecs = base64_decode($specs);
+            $decompressedSpecs = gzdecode($decodedSpecs);
 
-        // Decode json object
-        $data = json_decode($decompressedSpecs);
+            // Decode json object
+            $data = json_decode($decompressedSpecs);
 
-
-        // Store per serial each unique mac address
-        if (isset($data->mac))
-            $macAddress = $data->mac; {
-            if (!isset($serialMacMap[$serial])) {
-                $serialMacMap[$serial] = [];
-            }
-            if (!in_array($macAddress, $serialMacMap[$serial])) {
-                $serialMacMap[$serial][] = $macAddress;
+            // Store per serial each unique mac address
+            if (isset($data->mac)) {
+                $macAddress = $data->mac;
+                if (!isset($serialMacMap[$serial])) {
+                    $serialMacMap[$serial] = [];
+                }
+                if (!in_array($macAddress, $serialMacMap[$serial])) {
+                    $serialMacMap[$serial][] = $macAddress;
+                }
             }
         }
     }
