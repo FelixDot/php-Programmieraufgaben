@@ -11,9 +11,9 @@ if ($fileOpen) {
         if ($serialPos && $specsPos) {
 
             $serialPart = substr($line, $serialPos + 7);
-            $serial = trim(substr($serialPart, 0, strpos($serialPart, ' ')));
+            $serial = substr($serialPart, 0, strpos($serialPart, ' '));
             $specsPart = substr($line, $specsPos + 6);
-            $specs = trim(substr($specsPart, 0, strpos($specsPart, ' ')));
+            $specs = substr($specsPart, 0, strpos($specsPart, ' '));
 
             // Decode and decompress specs
             $decodedSpecs = base64_decode($specs);
